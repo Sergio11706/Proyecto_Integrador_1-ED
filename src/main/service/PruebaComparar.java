@@ -1,5 +1,5 @@
 package main.service;
 
-public class CompararCartas {
+public class PruebaComparar {
     
 }
