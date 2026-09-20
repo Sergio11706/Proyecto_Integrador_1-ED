@@ -14,6 +14,27 @@ public class JuegoService {
     public JuegoService() {
 
     }
+    public void prepararJuego(Jugador j1, Jugador j2, Jugador j3, Jugador j4) {
+        jugadores = new ResizableQueue<Jugador>();
+        jugadores.offer(j1);
+        jugadores.offer(j2);
+        jugadores.offer(j3);
+        jugadores.offer(j4);
+        mazo = crearYMezclarMazo();
+        cartaMesa = new Carta[4]; 
+    }
+
+    public void jugarRonda() {
+        int cantidad = jugadores.size();
+    
+        for (int i = 0; i < cantidad; i++) {
+            Jugador jugadorActual = jugadores.poll();
+            Carta cartaSacada = mazo.pop();
+        
+            cartaMesa[i] = cartaSacada;
+            jugadores.offer(jugadorActual);
+        }
+    }
 
     public Stack<Carta> crearYMezclarMazo() {
         Carta[] cartas = generarMazo();
