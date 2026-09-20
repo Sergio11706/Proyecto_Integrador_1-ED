@@ -42,6 +42,10 @@ public class Jugador {
         return cartasGanadas.size();
     }
 
+    public Stack<Carta> getCartasGanadas() {
+        return cartasGanadas;
+    }
+
     public void agregarCarta(Carta carta) {
         if (carta == null) throw new NullPointerException();
         cartasGanadas.push(carta);
@@ -72,7 +76,7 @@ public class Jugador {
     }
 
     public String toString() {
-        return nombre + " " + apellido + " (Puntaje: " + calcularPuntaje() + ")";
+        return nombre + " " + apellido + " - " + edad + " años"; 
     }
     
 }
