@@ -1,5 +1,6 @@
 package main.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -41,6 +42,40 @@ public class JuegoService {
         }
 
         repartirCartas(jugadoresRonda);
+    }
+
+    public Jugador[] ganadorPartida() {
+        if (jugadores == null || jugadores.isEmpty()) {
+            System.out.println("No hay jugadores en la partida.");
+            return null;
+        }
+
+        int mayorPuntaje = -1;
+        //Busca el mayor puntaje entre los jugadores
+        for (int i = 0; i < jugadores.size(); i++) {
+            Jugador jugadorActual = jugadores.poll();
+            int puntaje = jugadorActual.calcularPuntaje();
+
+            if (puntaje > mayorPuntaje) {
+                mayorPuntaje = puntaje;
+            }
+            jugadores.offer(jugadorActual);
+        }
+
+        ArrayList<Jugador> ganadores = new ArrayList<>();
+        //Busca los jugadores que tengan el mayor puntaje y los agrega a la lista de ganadores
+        for (int i = 0; i < jugadores.size(); i++) {
+            Jugador jugadorActual = jugadores.poll();
+
+            if (jugadorActual.calcularPuntaje() == mayorPuntaje) {
+                ganadores.add(jugadorActual);
+            }
+            jugadores.offer(jugadorActual);
+        }
+
+        return ganadores.toArray(new Jugador[0]);
+        //Devuelve el arreglo de jugadores
+        //Si hay solo un jugador, es el unico ganador, si hay varios, hay empate
     }
 
     public Stack<Carta> crearYMezclarMazo() {
