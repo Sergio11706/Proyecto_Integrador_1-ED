@@ -6,61 +6,45 @@ public class Jugador {
     private String apellido;
     private int edad;
     private Stack<Carta> cartasGanadas;
-    private int cantCartasGanadas;
 
     public Jugador(String nombre, String apellido, int edad) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.edad = edad;
+        setNombre(nombre);
+        setApellido(apellido);
+        setEdad(edad);
         this.cartasGanadas = new Stack<Carta>(); 
-        this.cantCartasGanadas = 0;
     }
     //getters y setters
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
 
-    public String setNombre(String nombre) {
-        this.nombre = nombre;
-        return nombre;
+    public void setNombre(String nombre) {
+        this.nombre = validarNombreYApellido(nombre);
     }
 
     public String getApellido() {
-        return apellido;
+        return this.apellido;
     }
 
-    public String setApellido(String apellido) {
-        this.apellido = apellido;
-        return apellido;
+    public void setApellido(String apellido) {
+        this.apellido = validarNombreYApellido(apellido);
     }
 
     public int getEdad() {
-        return edad;
+        return this.edad;
     }
 
-    public int setEdad(int edad) {
-        this.edad = edad;
-        return edad;
-    }
-
-    public Stack<Carta> getCartasGanadas() {
-        return cartasGanadas;
-    }
-
-    public void setCartasGanadas(Stack<Carta> cartasGanadas) {
-        this.cartasGanadas = cartasGanadas;
+    public void setEdad(int edad) {
+        this.edad = validarEdad(edad);
     }
 
     public int getCantCartasGanadas() {
-        return cantCartasGanadas;
-    }
-    public void setCantCartasGanadas(int cantCartasGanadas) {
-        this.cantCartasGanadas = cantCartasGanadas;
+        return cartasGanadas.size();
     }
 
     public void agregarCarta(Carta carta) {
+        if (carta == null) throw new NullPointerException();
         cartasGanadas.push(carta);
-        cantCartasGanadas++;
     }
 
     public int calcularPuntaje() {
@@ -73,6 +57,18 @@ public class Jugador {
         }
 
         return puntajeTotal;
+    }
+
+    private String validarNombreYApellido(String cadena) {
+        if (cadena.trim().equals("") || cadena == null)
+          throw new IllegalArgumentException();
+        return cadena;
+    }
+
+    private int validarEdad(int edad) {
+        if (edad < 5 || edad > 100)
+          throw new IllegalArgumentException("ERROR: La edad debe estar entre 5 y 100");
+        return edad;
     }
 
     public String toString() {
