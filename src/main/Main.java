@@ -4,6 +4,33 @@ import main.model.*;
 import main.service.*;
 import main.util.*;
 
+/**
+ * Clase principal para el Proyecto Integrador I - Estructura de Datos.
+ *
+ * @author Acuña, Sergio Facundo
+ * @author Andreu, Luca Maximiliano
+ * @author Silva, Jael Abril Alejandra
+ * @author Cruz, Kevin Brian Joel
+ * @author Montaño, Lucas Antonio
+ * @author Ramos, Daniel Maximiliano Efraín
+ *
+ *          Caso de estudio: Juego de cartas
+ *
+ *          Cuatro jugadores se enfrentan en un juego de cartas que consiste en
+ *          varias rondas en las que cada jugador toma un naipe de un mazo de
+ *          cartas francesas (trébol, pica, corazón y diamante) ordenadas al azar.
+ *          Luego, los jugadores comparan sus cartas de la ronda actual y el que
+ *          resulte con la carta de mayor valor numérico les quita a los demás las
+ *          suyas y las conserva. Si más de un jugador tiene una carta con el mismo
+ *          valor máximo (empate), cada jugador conserva su propia carta. Las rondas
+ *          se repiten hasta que se acaban los naipes del mazo (a fines de simplificar,
+ *          el juego puede finalizar tras jugar tres rondas).
+ *
+ *          Cada naipe posee palo (trébol, corazón, diamante o pica), valor (1 a 13)
+ *          y estado (disponible o no disponible). Cada jugador posee nombre,
+ *          apellido y edad.
+ */
+
 public class Main {
 
     public static void main(String[] args) {

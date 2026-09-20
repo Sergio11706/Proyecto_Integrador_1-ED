@@ -6,6 +6,27 @@ import java.util.Collections;
 import main.model.*;
 import main.util.*;
 
+/**
+ * Clase de servicio que contiene la lógica del juego de cartas.
+ *
+ *          Se encarga de gestionar las estructuras de datos del juego: la cola
+ *          de turnos de los jugadores, la pila que representa el mazo y el
+ *          arreglo con las cartas jugadas en la ronda actual (mesa).
+ *
+ *          Entre sus responsabilidades se encuentran:
+ *              Preparar el juego, cargando la cola de jugadores y generando y
+ *              mezclando el mazo de 52 cartas.
+ *              Jugar una ronda, haciendo que cada jugador tome una carta del
+ *              mazo según el orden de la cola de turnos.
+ *              Determinar el ganador de cada ronda según el mayor valor
+ *              numérico entre las cartas jugadas, contemplando la posibilidad
+ *              de empate.
+ *              Repartir las cartas de la ronda al jugador ganador, o a cada
+ *              jugador su propia carta en caso de empate.
+ *              Determinar el/los ganador(es) de la partida una vez que el
+ *              mazo se agota, comparando el puntaje total de cada jugador.
+ */
+
 public class JuegoService {
     Queue<Jugador> jugadores;
     Stack<Carta> mazo;
