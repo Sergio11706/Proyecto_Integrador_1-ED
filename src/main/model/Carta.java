@@ -1,54 +1,42 @@
 package main.model;
 
 public class Carta {
-    private String palo; 
+    private Palo palo; 
     private int valor;
-    private boolean disponible;
 
-    public Carta(String palo, int valor) {
-         if (valor < 1 || valor > 13) {
-            throw new IllegalArgumentException(
-                "El valor debe estar entre 1 y 13"
-            );
-        }
-        this.palo = palo;
-        this.valor = valor;
-        this.disponible = true; 
+    public Carta(Palo palo, int valor) {
+      setPalo(palo);
+      setValor(valor);
     }
 
-    public String getPalo() {
-        return palo;
+    public Palo getPalo() {
+        return this.palo;
     }
 
-    public String setPalo(String palo) {
-        this.palo = palo;
-        return palo;
+    public void setPalo(Palo palo) {
+        this.palo = validarPalo(palo);
     }
 
     public int getValor() {
+        return this.valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = validarValor(valor);
+    }
+
+    private Palo validarPalo(Palo palo) {
+        if (palo == null) throw new IllegalArgumentException();
+        return palo;
+    }
+
+    private int validarValor(int valor) {
+        if (valor < 1 || valor > 13) 
+          throw new IllegalArgumentException("\nERROR: El valor debe estar entre 1 y 13");
         return valor;
     }
 
-    public int setValor(int valor) {
-         if (valor < 1 || valor > 13) {
-            throw new IllegalArgumentException(
-                "El valor debe estar entre 1 y 13"
-            );}
-        else {
-            this.valor = valor;
-            return valor;   
-        }
-    }
-
-    public boolean isDisponible() {
-        return disponible;
-    }
-
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
-
     public String toString() {
-            return "Carta:" + valor + " de " + palo;
+        return "Carta: " + getValor() + " de " + getPalo();
     }
 }

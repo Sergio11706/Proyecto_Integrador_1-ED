@@ -26,6 +26,7 @@ public class Stack<E> {
     }
 
     // Quita y devuelve el elemento de la cima. Lanza excepción si está vacía
+    @SuppressWarnings("unchecked")
     public E pop() {
         if (isEmpty()) throw new EmptyStackException();
         count--;
@@ -35,6 +36,7 @@ public class Stack<E> {
     }
 
     // Devuelve el elemento de la cima sin quitarlo. Lanza excepción si está vacía
+    @SuppressWarnings("unchecked")
     public E peek() {
         if (isEmpty()) throw new EmptyStackException();
         return (E) stack[count - 1];
