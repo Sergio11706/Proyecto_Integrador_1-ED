@@ -1,6 +1,5 @@
 package main.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -11,13 +10,15 @@ public class JuegoService {
     Queue<Jugador> jugadores;
     Stack<Carta> mazo;
     Carta[] cartaMesa;
+    Jugador[] jugadoresRonda;
 
     public JuegoService() {
 
     }
 
+    // Agrega jugadores a la cola y prepara el mazo
     public void prepararJuego(Jugador j1, Jugador j2, Jugador j3, Jugador j4) {
-        jugadores = new ResizableQueue<Jugador>();
+        jugadores = new CountedQueue<Jugador>(4);
         jugadores.offer(j1);
         jugadores.offer(j2);
         jugadores.offer(j3);
@@ -26,32 +27,30 @@ public class JuegoService {
         cartaMesa = new Carta[4];
     }
 
-    public void jugarRonda() {
+    // Juega una ronda: cada jugador saca una carta y se guarda en la mesa
+    public int jugarRonda() {
         int cantidad = jugadores.size();
-
-        Jugador[] jugadoresRonda = new Jugador[cantidad];
+        jugadoresRonda = new Jugador[cantidad];
 
         for (int i = 0; i < cantidad; i++) {
             Jugador jugadorActual = jugadores.poll();
             Carta cartaSacada = mazo.pop();
 
-            //Guardo temporalmente a los jugadores para que el indice del jugador coincida con el de las cartas
             jugadoresRonda[i] = jugadorActual;
             cartaMesa[i] = cartaSacada;
             jugadores.offer(jugadorActual);
         }
 
-        repartirCartas(jugadoresRonda);
+        return repartirCartas(jugadoresRonda);
     }
 
-    public Jugador[] ganadorPartida() {
+    // Devuelve una cola de ganadores de la partida según el mayor puntaje    
+    public Queue<Jugador> ganadorPartida() {
         if (jugadores == null || jugadores.isEmpty()) {
-            System.out.println("No hay jugadores en la partida.");
             return null;
         }
 
         int mayorPuntaje = -1;
-        //Busca el mayor puntaje entre los jugadores
         for (int i = 0; i < jugadores.size(); i++) {
             Jugador jugadorActual = jugadores.poll();
             int puntaje = jugadorActual.calcularPuntaje();
@@ -62,22 +61,20 @@ public class JuegoService {
             jugadores.offer(jugadorActual);
         }
 
-        ArrayList<Jugador> ganadores = new ArrayList<>();
-        //Busca los jugadores que tengan el mayor puntaje y los agrega a la lista de ganadores
+        Queue<Jugador> ganadores = new CountedQueue<Jugador>(4);
         for (int i = 0; i < jugadores.size(); i++) {
             Jugador jugadorActual = jugadores.poll();
 
             if (jugadorActual.calcularPuntaje() == mayorPuntaje) {
-                ganadores.add(jugadorActual);
+                ganadores.offer(jugadorActual);
             }
             jugadores.offer(jugadorActual);
         }
 
-        return ganadores.toArray(new Jugador[0]);
-        //Devuelve el arreglo de jugadores
-        //Si hay solo un jugador, es el unico ganador, si hay varios, hay empate
+        return ganadores;
     }
 
+    // Crea y mezcla una pila para simular el mazo de cartas
     public Stack<Carta> crearYMezclarMazo() {
         Carta[] cartas = generarMazo();
         Collections.shuffle(Arrays.asList(cartas));
@@ -90,6 +87,7 @@ public class JuegoService {
         return mazo;
     }
 
+    // Inicializa una pila y agrega 52 objetos de tipo Carta
     private Carta[] generarMazo() {
         Carta[] cartas = new Carta[52];
         Palo[] palos = Palo.values();
@@ -104,12 +102,11 @@ public class JuegoService {
         return cartas;
     }
 
+    // Devuelve el mayor valor entre las cartas dadas
     public int mayorValor(Carta[] cartas) {
-
         int mayor = cartas[0].getValor();
 
         for (int i = 1; i < cartas.length; i++) {
-
             if (cartas[i].getValor() > mayor) {
                 mayor = cartas[i].getValor();
             }
@@ -118,12 +115,11 @@ public class JuegoService {
         return mayor;
     }
 
+    // Cuenta cuántas cartas tienen el valor mayor
     public int cantidadMayor(Carta[] cartas, int mayor) {
-
         int cantidad = 0;
 
         for (int i = 0; i < cartas.length; i++) {
-
             if (cartas[i].getValor() == mayor) {
                 cantidad++;
             }
@@ -132,10 +128,9 @@ public class JuegoService {
         return cantidad;
     }
 
+    // Determina el ganador de la ronda retornando el índice del ganador o -1 si hay empate
     public int ganadorRonda() {
-
         int mayor = mayorValor(cartaMesa);
-
         int cantidadMayor = cantidadMayor(cartaMesa, mayor);
 
         if (cantidadMayor > 1) {
@@ -143,7 +138,6 @@ public class JuegoService {
         }
 
         for (int i = 0; i < cartaMesa.length; i++) {
-
             if (cartaMesa[i].getValor() == mayor) {
                 return i;
             }
@@ -152,29 +146,36 @@ public class JuegoService {
         return -1;
     }
 
-
-    //Defino para quien van las cartas segun el resultado de la ronda
-    public void repartirCartas(Jugador[] jugadoresRonda) {
-
+    // Reparte las cartas de la mesa al ganador o a todos en caso de empate
+    public int repartirCartas(Jugador[] jugadoresRonda) {
         int ganador = ganadorRonda();
 
         if (ganador == -1) {
-
-            System.out.println("Más de un jugador tiene la carta con mayor valor numerico, por lo tanto, esta ronda queda en empate");
-
             for (int i = 0; i < cartaMesa.length; i++) {
                 jugadoresRonda[i].agregarCarta(cartaMesa[i]);
             }
-
         } else {
-
-            System.out.println("Ganó la ronda: " + jugadoresRonda[ganador].getNombre()+ " " + jugadoresRonda[ganador].getApellido());
-
             for (int i = 0; i < cartaMesa.length; i++) {
                 jugadoresRonda[ganador].agregarCarta(cartaMesa[i]);
             }
         }
 
+        return ganador;
+    }
+
+    // Verifica si aún quedan cartas en el mazo
+    public boolean hayCartasEnMazo() {
+        return !mazo.isEmpty();
+    }
+
+    // Devuelve los jugadores de la última ronda
+    public Jugador[] getJugadoresRonda() {
+        return jugadoresRonda;
+    }
+
+    // Devuelve las cartas jugadas en la mesa
+    public Carta[] getCartaMesa() {
+        return cartaMesa;
     }
 
 }

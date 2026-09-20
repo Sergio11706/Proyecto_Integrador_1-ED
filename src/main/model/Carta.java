@@ -37,6 +37,6 @@ public class Carta {
     }
 
     public String toString() {
-        return "Carta: " + getValor() + " de " + getPalo();
+        return  + valor + " de " + palo;
     }
 }
