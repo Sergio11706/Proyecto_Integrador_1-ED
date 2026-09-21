@@ -46,6 +46,23 @@ public class Jugador {
         return cartasGanadas;
     }
 
+    public String getNombreCompleto() {
+        return String.format("%s %s",
+            this.nombre, this.apellido);
+    }
+
+    public Carta cartaEnMano() {
+        if (cartasGanadas.isEmpty()) 
+            throw new RuntimeException("\n" + getNombreCompleto() + " no tiene cartas");
+        return cartasGanadas.peek();
+    }
+
+    public Carta darCartaEnMano() {
+        if (cartasGanadas.isEmpty()) 
+            throw new RuntimeException("\n" + getNombreCompleto() + " no tiene cartas");
+        return cartasGanadas.pop();
+    }
+
     public void agregarCarta(Carta carta) {
         if (carta == null) throw new NullPointerException();
         cartasGanadas.push(carta);
